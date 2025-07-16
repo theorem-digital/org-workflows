@@ -1,0 +1,30 @@
+name: Restrict.Develop.Merges.Branch
+
+
+on:
+ push:
+   branches:
+    - develop
+ pull_request:
+   branches:
+     - develop
+
+
+jobs:
+ restrict-to-merge-branch-develop:
+   runs-on: ubuntu-latest
+
+
+   steps:
+
+     - name: Check merge branch
+       if: github.event.pull_request.base.ref == 'develop' || github.event_name == 'push'
+       run: |
+         if [ "${{ github.event.pull_request.head.ref }}" != "feature/*" ]; then
+           echo "Merges to develop are only allowed from the feature/* branch."
+           exit 1
+         fi
+         if [ "${{ github.event_name }}" == "push" && "${{ github.ref }}" != "refs/heads/main" ]; then
+           echo "Pushes to develop are allowed only in PRs from the feature/* branch or from the main branch post release."
+           exit 1
+         fi

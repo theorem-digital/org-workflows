@@ -1,0 +1,29 @@
+name: Restrict.Main.Merges.Branch
+
+
+on:
+ push:
+   branches:
+     - main
+ pull_request:
+   branches:
+     - main
+
+
+jobs:
+ restrict-to-merge-branch-main:
+   runs-on: ubuntu-latest 
+
+
+   steps:
+     - name: Check merge branch
+       if: github.event.pull_request.base.ref == 'main' || github.event_name == 'push'
+       run: |
+         if [ "${{ github.event.pull_request.head.ref }}" != "release/*" ]; then
+           echo "Merges to main are only allowed from the release/* branch."
+           exit 1
+         fi
+         if [ "${{ github.event_name }}" == "push" ]; then
+           echo "Pushes to main are allowed only in PRs from the release/* branch."
+         fi
+   
