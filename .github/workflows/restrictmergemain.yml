@@ -1,4 +1,4 @@
-name: Restrict.Main.Merges.Branch
+name: Restrict merges to main
 
 
 on:

@@ -1,5 +1,4 @@
-name: Restrict.Develop.Merges.Branch
-
+name: Restrict merges to develop 
 
 on:
  push:
