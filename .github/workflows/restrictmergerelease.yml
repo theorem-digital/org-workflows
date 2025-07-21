@@ -22,7 +22,7 @@ jobs:
      - name: Check merge branch
        run: |
         if ("${{ github.event.pull_request.head.ref }}" -eq 'release' -or "${{ github.event_name }}" -eq 'push') {
-          if ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("hotfix/")) -or ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("bugfix/") ) {
+          if (( -not "${{ github.event.pull_request.head.ref }}".StartsWith("hotfix/")) -or ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("bugfix/")) {
             throw "Merges to release are only allowed from a hotfix/* or a bugfix/* branch."
           }
           if ( "${{ github.event_name }}" -eq 'push' ) {
