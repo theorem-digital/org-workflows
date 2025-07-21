@@ -1,0 +1,31 @@
+name: Restrict merges to release 
+
+on:
+ push:
+   branches:
+    - release
+ pull_request:
+   branches:
+     - release
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+ restrict-to-merge-branch-release:
+   runs-on: ubuntu-latest
+
+
+   steps:
+
+     - name: Check merge branch
+       run: |
+        if ("${{ github.event.pull_request.head.ref }}" -eq 'release' -or "${{ github.event_name }}" -eq 'push') {
+          if ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("hotfix/")) {
+            throw "Merges to release are only allowed from the hotfix/* branch."
+          }
+          if ( "${{ github.event_name }}" -eq 'push' ) {
+            throw "Pushes to release are allowed only in PRs from the hotfix/* branch or from the main branch post release."
+          }
+        }
