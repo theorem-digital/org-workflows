@@ -8,6 +8,10 @@ on:
  pull_request:
    branches:
      - main
+     
+defaults:
+  run:
+    shell: pwsh
 
 
 jobs:
@@ -17,13 +21,12 @@ jobs:
 
    steps:
      - name: Check merge branch
-       if: github.event.pull_request.base.ref == 'main' || github.event_name == 'push'
        run: |
-         if [ "${{ github.event.pull_request.head.ref }}" != "release/*" ]; then
-           echo "Merges to main are only allowed from the release/* branch."
-           exit 1
-         fi
-         if [ "${{ github.event_name }}" == "push" ]; then
-           echo "Pushes to main are allowed only in PRs from the release/* branch."
-         fi
-   
+        if ("${{ github.event.pull_request.head.ref }}" -eq 'main' -or ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -eq 'refs/heads/main')) {
+          if ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("release/")) {
+            throw "Merges to main are only allowed from the release/* branch."
+          }
+          if ( "${{ github.event_name }}" -eq 'push' ) {
+            throw "Pushes to main are allowed only in PRs from the release/* branch."
+          }
+        }
