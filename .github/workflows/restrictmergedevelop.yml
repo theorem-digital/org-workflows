@@ -22,7 +22,7 @@ jobs:
 
      - name: Check merge branch
        run: |
-        if ("${{ github.event.pull_request.head.ref }}" -eq 'develop' -or "${{ github.event_name }}" -eq 'push'")) {
+        if ("${{ github.event.pull_request.head.ref }}" -eq 'develop' -or "${{ github.event_name }}" -eq 'push'") {
           if ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("feature/")) {
             throw "Merges to develop are only allowed from the feature/* branch."
           }
