@@ -9,6 +9,9 @@ on:
    branches:
      - develop
 
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
  restrict-to-merge-branch-develop:
@@ -18,13 +21,12 @@ jobs:
    steps:
 
      - name: Check merge branch
-       if: github.event.pull_request.base.ref == 'develop' || github.event_name == 'push'
        run: |
-         if [ startsWith("${{ github.event.pull_request.head.ref }}","feature/*") ]; then
-           echo "Merges to develop are only allowed from the feature/* branch."
-           exit 1
-         fi
-         if [ "${{ github.event_name }}" == "push" && startsWith("${{ github.ref }}","refs/heads/main") ]; then
-           echo "Pushes to develop are allowed only in PRs from the feature/* branch or from the main branch post release."
-           exit 1
-         fi
+        if ("${{ github.event.pull_request.head.ref }}" -eq 'develop' -or "${{ github.event_name }}" -eq 'push'")) {
+          if ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("feature/")) {
+            throw "Merges to develop are only allowed from the feature/* branch."
+          }
+          if ( "${{ github.event_name }}" -eq 'push' -and -not "${{ github.ref }}".StartsWith("refs/heads/main") ) {
+            throw "Pushes to develop are allowed only in PRs from the feature/* branch or from the main branch post release."
+          }
+        }
