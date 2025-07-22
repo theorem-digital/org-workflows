@@ -22,13 +22,12 @@ jobs:
      - name: Check merge branch
        run: |
         if ("${{ github.event.pull_request.base.ref }}" -eq 'develop') {
-          if ( -not "${{ github.event.pull_request.head.ref }}".StartsWith("feature/")) {
+          if ( "${{ github.event_name }}" -eq 'pull_request' -and -not "${{ github.event.pull_request.head.ref }}".StartsWith("feature/")) {
             throw "Merges to develop are only allowed from the feature/* branch."
           }
         }
-      
         if ( "${{ github.event_name }}" -eq 'push' ) {
-          if ( "${{ github.event_name }}" -eq 'push' -and -not "${{ github.ref }}".StartsWith("refs/heads/main") ) {
+          if ( -not "${{ github.ref }}".StartsWith("refs/heads/main") ) {
             throw "Pushes to develop are allowed only in PRs from the feature/* branch or from the main branch post release."
           }
         }
