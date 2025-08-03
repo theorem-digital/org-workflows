@@ -13,7 +13,7 @@ defaults:
     shell: pwsh
 
 jobs:
- restrict-to-merge-branch-release:
+ restrict-pr-to-merge-branch-release:
    runs-on: ubuntu-latest
 
 
