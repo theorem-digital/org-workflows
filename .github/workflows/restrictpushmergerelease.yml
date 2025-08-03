@@ -1,4 +1,4 @@
-name: Restrict merges to release 
+name: Restrict push merges to release
 
 on:
  push:
