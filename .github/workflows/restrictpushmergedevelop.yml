@@ -23,10 +23,9 @@ jobs:
        run: |
         write-host "Checking if the push is from the main branch post release."
         write-host "Current ref: "${{ github.ref }}
-        write-host "Current branch: "${{ github.ref_name }}
-
-        if ( -not "${{ github.ref }}".StartsWith("refs/heads/main") ) {
+        
+        if ( "${{ github.ref }}".StartsWith("refs/heads/main")) {
           throw "Pushes to develop are allowed only from the main branch post release."
         }
-        
+        write-host "Push is valid."
 
