@@ -23,5 +23,4 @@ jobs:
        run: |
         if ("${{ github.event_name }}" -eq 'push') {
             throw "Pushes to release are allowed only in PRs from a hotfix/* branch or a bugfix/* branch."
-          }
         }
