@@ -1,0 +1,28 @@
+name: Restrict pr merges to main
+
+
+on:
+ push:
+   branches:
+     - main
+ pull_request:
+   branches:
+     - main
+     
+defaults:
+  run:
+    shell: pwsh
+
+
+jobs:
+ restrict-pr-to-merge-branch-main:
+   runs-on: ubuntu-latest 
+
+
+   steps:
+     - name: Check merge branch
+       run: |
+        if ("${{ github.event.pull_request.head.ref }}" -eq 'main'  )
+         {
+            throw "Merges to main are not allowed via pull requests."
+         }

@@ -1,0 +1,30 @@
+name: Restrict push merges to main
+
+
+on:
+ push:
+   branches:
+     - main
+ pull_request:
+   branches:
+     - main
+     
+defaults:
+  run:
+    shell: pwsh
+
+
+jobs:
+ restrict-push-to-merge-branch-main:
+   runs-on: ubuntu-latest 
+
+
+   steps:
+     - name: Check merge branch
+       run: |
+        if (("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -eq 'refs/heads/main')) {
+          if ( -not "${{ github.event.ref }}".StartsWith("release/") and -not "${{ github.event.ref }}".StartsWith("hotfix/")) {
+            throw "Pushes to main are allowed only from the release/* or hotfix/* branches."
+          }
+        }
+        write-host "Push is valid."
