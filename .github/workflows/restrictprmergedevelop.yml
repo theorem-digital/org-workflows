@@ -10,23 +10,27 @@ defaults:
     shell: pwsh
 
 jobs:
- restrict-pr-to-merge-branch-develop:
-   runs-on: ubuntu-latest
+  restrict-pr-to-merge-branch-develop:
+    runs-on: ubuntu-latest
 
+    steps:
 
-   steps:
+      - name: Check merge branch
+        run: |
 
-     - name: Check merge branch
-       run: |
-        if ("${{ github.event.pull_request.base.ref }}" -eq 'develop') {
-          write-host "Current PR head ref: "${{ github.event.pull_request.head.ref }}
-          write-host "Current PR base ref: "${{ github.event.pull_request.base.ref }}
-          write-host "Current head ref: "${{ github.head_ref }}
-          write-host "Current base ref: "${{ github.base_ref }}
+          Write-Host "no problemo"
 
-          if ( "${{ github.event_name }}" -eq 'pull_request' -and -not "${{ github.event.pull_request.head.ref }}".StartsWith("feature/")) {
-            throw "Merges to develop are only allowed from the feature/* branch."
-          }
-        }
+          # if ("${{ github.event.pull_request.base.ref }}" -eq 'develop')
+          # {
+          #   write-host "Current PR head ref: "${{ github.event.pull_request.head.ref }}
+          #   write-host "Current PR base ref: "${{ github.event.pull_request.base.ref }}
+          #   write-host "Current head ref: "${{ github.head_ref }}
+          #   write-host "Current base ref: "${{ github.base_ref }}
+
+          #   if ( "${{ github.event_name }}" -eq 'pull_request' -and -not "${{ github.event.pull_request.head.ref }}".StartsWith("feature/"))
+          #   {
+          #     throw "Merges to develop are only allowed from the feature/* branch."
+          #   }
+          # }
        
 
