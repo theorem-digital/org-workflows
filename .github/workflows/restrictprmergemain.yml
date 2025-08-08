@@ -22,7 +22,7 @@ jobs:
    steps:
      - name: Check merge branch
        run: |
-        if ("${{ github.event.pull_request.head.ref }}" -eq 'main'  )
+        if ("${{ github.event.pull_request.head.ref }}" -eq 'main'  or  "${{ github.event.pull_request.base.ref }}" -eq 'main')
          {
             throw "Merges to main are not allowed via pull requests."
          }
